@@ -1,6 +1,6 @@
 var path = require('path');
 var fs = require('fs-extra');
-var sitesFolder = path.resolve('./sites');
+var sitesFolder = path.resolve('/home/shreyas/travel_website_scrap');
 
 var klaw = require('klaw');
 var through2 = require('through2');
@@ -32,11 +32,14 @@ var finalString = "";
 
   function extractEmailFromString(string){
   	var array = string.match(emailRegex);
-    allEmails = array.filter(function(item, pos) {
-        return array.indexOf(item) == pos;
-    });
-    console.log('Emails found :' );
-    console.log(allEmails);
+  	if(array){
+	    allEmails = array.filter(function(item, pos) {
+	        return array.indexOf(item) == pos;
+	    });
+	    console.log('Emails found :' );
+	    console.log(allEmails);
+  	}
+
   }
 
   var phoneNumberRegex  = /((\+*)((0[ -]+)*|(91 )*)(\d{12}|\d{10}))|\d{5}([- ]*)\d{6}/gi; 
@@ -44,22 +47,30 @@ var finalString = "";
   function extractPhoneNumber(string){
     //var whiteSpaceRemoveString = string.replace(/\s/g,'');
     var array = string.match(phoneNumberRegex);
-    allPhoneNumbera = array.filter(function(item, pos) {
-        return array.indexOf(item) == pos;
-    });
-    console.log('Phone Number found :' );
-    console.log(allPhoneNumbera);
+    if(array){
+	    allPhoneNumbera = array.filter(function(item, pos) {
+	        return array.indexOf(item) == pos;
+	    });
+	    console.log('Phone Number found :' );
+	    console.log(allPhoneNumbera);
+    }
+
   }
 
   function walkFolder(htmlFolder,cb){
+
     klaw(htmlFolder)
     .pipe(includeHtmlFilter)
+	.on('error', function(err){
+		includeHtmlFilter.emit('error', err);
+	})
     .on('data', function(item){processFile(item.path);})
     .on('end', function() {
       extractEmailFromString(finalString);
       extractPhoneNumber(finalString);
       cb();
     });
+
   }
 
   var allSitesFolders = fs.readdirSync(sitesFolder)
