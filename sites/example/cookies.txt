@@ -1,4 +1,0 @@
-# HTTrack Website Copier Cookie File
-# This file format is compatible with Netscape cookies
-sainitravels.com	TRUE	/	FALSE	1999999999	ASP.NET_SessionId	amag2bok5sewa4r5lluw5jnn
-
